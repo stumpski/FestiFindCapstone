@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Portfolio Template</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --yellow: #F5E642;
+    --white: #FFFFFF;
+    --off-white: #E8E4DC;
+    --dark: #0D0D12;
+    --pink: #E8356D;
+    --purple: #6B2FA0;
+    --blue: #1A237E;
+    --accent-pink: rgba(232, 53, 109, 0.6);
+    --accent-purple: rgba(107, 47, 160, 0.5);
+    --accent-blue: rgba(26, 35, 126, 0.7);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+  }
+
+  /* ─── NOISE TEXTURE (SVG data-uri) ─── */
+  .page {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    padding: 60px 72px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .page::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    opacity: 0.07;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── GRADIENT BLOBS ─── */
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .blob-tl  { width: 500px; height: 400px; top: -160px; left: -120px; background: radial-gradient(circle, #E8356D 0%, #6B2FA0 55%, transparent 80%); opacity: 0.55; }
+  .blob-tr  { width: 420px; height: 380px; top: -100px; right: -80px;  background: radial-gradient(circle, #1A237E 0%, #6B2FA0 50%, transparent 80%); opacity: 0.6;  }
+  .blob-br  { width: 350px; height: 320px; bottom: -80px; right: -60px; background: radial-gradient(circle, #E8356D 0%, #6B2FA0 60%, transparent 80%); opacity: 0.45; }
+  .blob-bl  { width: 300px; height: 260px; bottom: -60px; left: -40px;  background: radial-gradient(circle, #1A237E 0%, transparent 75%); opacity: 0.5; }
+  .blob-mid { width: 600px; height: 200px; top: 40%; left: 10%;  background: radial-gradient(ellipse, #6B2FA0 0%, transparent 70%); opacity: 0.3; }
+
+  /* ─── PAGE NUMBER ─── */
+  .page-num {
+    position: absolute;
+    top: 28px;
+    right: 72px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.6);
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    z-index: 10;
+  }
+  .page-num::before {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 1px;
+    background: rgba(255,255,255,0.4);
+  }
+
+  /* ─── SECTION NUMBER BADGE ─── */
+  .section-badge {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    border: 1px solid rgba(245, 230, 66, 0.5);
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 16px;
+    margin-bottom: 20px;
+    width: fit-content;
+  }
+  .section-badge .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--yellow);
+    display: inline-block;
+  }
+
+  /* ─── DISPLAY HEADINGS ─── */
+  .display-xl {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 12vw, 140px);
+    line-height: 0.92;
+    letter-spacing: 0.01em;
+    color: var(--yellow);
+    position: relative;
+    z-index: 2;
+  }
+  .display-lg {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 7vw, 88px);
+    line-height: 0.92;
+    letter-spacing: 0.01em;
+    color: var(--yellow);
+    position: relative;
+    z-index: 2;
+  }
+  .display-md {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(32px, 5vw, 56px);
+    line-height: 1;
+    letter-spacing: 0.01em;
+    color: var(--yellow);
+    position: relative;
+    z-index: 2;
+  }
+  .section-sub {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(20px, 3vw, 32px);
+    color: var(--yellow);
+    letter-spacing: 0.04em;
+    margin-bottom: 12px;
+  }
+
+  /* ─── BODY TEXT ─── */
+  .body-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.88);
+    position: relative;
+    z-index: 2;
+    max-width: 720px;
+  }
+  .body-text + .body-text { margin-top: 14px; }
+  .placeholder-text {
+    color: rgba(255,255,255,0.35);
+    font-style: italic;
+  }
+
+  /* ─── DECORATIVE ELEMENTS ─── */
+  .asterisk {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 100px;
+    color: var(--yellow);
+    line-height: 1;
+    position: absolute;
+    z-index: 1;
+    opacity: 0.9;
+    user-select: none;
+  }
+  .sparkle {
+    position: absolute;
+    z-index: 1;
+    user-select: none;
+  }
+  .x-pattern {
+    position: absolute;
+    z-index: 1;
+    opacity: 0.4;
+    user-select: none;
+    line-height: 1.4;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.5em;
+  }
+  .circle-deco {
+    position: absolute;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .crosshair-h, .crosshair-v {
+    position: absolute;
+    background: rgba(255,255,255,0.12);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .crosshair-h { height: 1px; width: 60%; }
+  .crosshair-v { width: 1px; height: 60%; }
+  .checker {
+    position: absolute;
+    display: grid;
+    grid-template-columns: repeat(4, 14px);
+    grid-template-rows: repeat(4, 14px);
+    gap: 2px;
+    z-index: 1;
+  }
+  .checker span {
+    display: block;
+    width: 14px; height: 14px;
+    background: var(--yellow);
+  }
+  .checker span:nth-child(even) { background: transparent; }
+
+  /* ─── ELLIPSE BADGE ─── */
+  .ellipse-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255,255,255,0.6);
+    border-radius: 999px;
+    padding: 12px 32px;
+    margin-bottom: 24px;
+    width: fit-content;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ─── CONTENT CARD ─── */
+  .content-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 4px;
+    padding: 28px 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ─── INSTRUCTION BLOCK ─── */
+  .instruction {
+    background: rgba(245, 230, 66, 0.06);
+    border-left: 3px solid var(--yellow);
+    padding: 16px 20px;
+    margin-top: 16px;
+    border-radius: 0 4px 4px 0;
+    position: relative;
+    z-index: 2;
+  }
+  .instruction p {
+    font-size: 13px;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.7);
+    font-style: italic;
+  }
+  .instruction .instr-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    color: var(--yellow);
+    margin-bottom: 6px;
+  }
+
+  /* ─── STEP LIST ─── */
+  .step-list {
+    list-style: none;
+    position: relative;
+    z-index: 2;
+    margin-top: 20px;
+  }
+  .step-list li {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-size: 14px;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.82);
+  }
+  .step-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--yellow);
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: -2px;
+  }
+
+  /* ─── BULLETS ─── */
+  .bullet-list {
+    list-style: none;
+    position: relative;
+    z-index: 2;
+    margin-top: 14px;
+  }
+  .bullet-list li {
+    padding: 6px 0 6px 22px;
+    position: relative;
+    font-size: 14px;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.82);
+  }
+  .bullet-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--yellow);
+    font-size: 18px;
+    line-height: 1.35;
+  }
+
+  /* ─── TWO COLUMN ─── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+    position: relative;
+    z-index: 2;
+  }
+  .three-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 28px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ─── IMAGE PLACEHOLDER ─── */
+  .img-placeholder {
+    background: rgba(255,255,255,0.05);
+    border: 1px dashed rgba(255,255,255,0.2);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: rgba(255,255,255,0.3);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    position: relative;
+    z-index: 2;
+  }
+  .img-placeholder svg { opacity: 0.3; }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(255,255,255,0.12);
+    margin: 28px 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ─── TAG ─── */
+  .tag {
+    display: inline-block;
+    background: rgba(245,230,66,0.12);
+    border: 1px solid rgba(245,230,66,0.3);
+    color: var(--yellow);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 2px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+  }
+
+  /* ─── BIBLIOGRAPHY ENTRY ─── */
+  .bib-entry {
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    position: relative;
+    z-index: 2;
+  }
+  .bib-entry:last-child { border-bottom: none; }
+  .bib-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--yellow);
+    margin-right: 12px;
+  }
+  .bib-citation {
+    font-size: 13px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.75);
+    font-style: italic;
+  }
+
+  /* ─── REFLECTION QUESTION ─── */
+  .refl-q {
+    background: rgba(107, 47, 160, 0.15);
+    border: 1px solid rgba(107, 47, 160, 0.35);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+    position: relative;
+    z-index: 2;
+  }
+  .refl-q .q-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 6px;
+  }
+  .refl-q p {
+    font-size: 14px;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.78);
+  }
+
+  /* ─── CLOSING LINE ─── */
+  .closing-line {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(20px, 3.5vw, 42px);
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 0.04em;
+    position: relative;
+    z-index: 2;
+    margin-top: 40px;
+  }
+
+  /* SVG sparkle icon inline */
+  .sparkle-icon {
+    display: inline-block;
+    width: 18px; height: 18px;
+    vertical-align: middle;
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- PAGE 1: COVER -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="page" style="min-height:100vh; justify-content:flex-end;">
+  <div class="blob blob-tl"></div>
+  <div class="blob blob-tr"></div>
+  <div class="blob blob-br"></div>
+  <div class="blob blob-mid"></div>
+
+  <!-- circle deco -->
+  <div class="circle-deco" style="width:420px;height:420px;top:50%;left:38%;transform:translate(-50%,-50%);"></div>
+  <div class="crosshair-h" style="top:50%;left:38%;transform:translate(-50%,-50%);"></div>
+  <div class="crosshair-v" style="top:50%;left:38%;transform:translate(-50%,-50%);"></div>
+
+  <!-- asterisk -->
+  <div class="asterisk" style="top:24px; right:160px; font-size:80px;">✳</div>
+
+  <!-- x-pattern bottom right -->
+  <div class="x-pattern" style="bottom:20px;right:40px;font-size:10px;letter-spacing:0.4em;">
+    × × × × × × ×<br>× × × × × × ×<br>× × × × × × ×<br>× × × × × × ×
+  </div>
+
+  <!-- page num -->
+  <div class="page-num">Page <span>01</span></div>
+
+  <!-- Main content -->
+<div style="display:flex; align-items:center; gap:40px; position:relative; z-index:2; margin-bottom:48px;">
+  
+  <div>
+    <p class="body-text placeholder-text" style="margin-bottom:20px;font-size:13px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.4);">HNUH 300 Capstone</p>
+    <div class="display-xl" style="margin-bottom:8px; font-size:375px;">FESTI<br>FIND</div>
+    <div class="divider" style="width:280px;margin:20px 0;"></div>
+    <p class="body-text" style="font-size:14px;letter-spacing:0.06em;color:rgba(255,255,255,0.55);">
+      Vincent Von Wachter &nbsp;·&nbsp; Spring 2026 &nbsp;·&nbsp; University of Maryland
+    </p>
+  </div>
+
+  <img src="titleimage.jpg" style="width:450px; border-radius:6px; margin-left:auto;">
+
+</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- PAGE 2: SECTION I – PROJECT ABSTRACT -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="page">
+  <div class="blob blob-tl"></div>
+  <div class="blob blob-tr"></div>
+  <div class="blob blob-br" style="opacity:0.3;"></div>
+
+  <!-- sparkle top right -->
+  <div class="asterisk" style="top:18px;right:220px;font-size:70px;">✳</div>
+
+  <!-- x-pattern bottom left -->
+  <div class="x-pattern" style="bottom:28px;left:40px;">
+    × × × × × × ×<br>× × × × × × ×<br>× × × × × × ×
+  </div>
+
+  <!-- circle deco -->
+  <div class="circle-deco" style="width:340px;height:340px;top:40%;right:10%;transform:translateY(-50%);"></div>
+
+  <div class="page-num">Page <span>02</span></div>
+
+  <div style="position:relative;z-index:2;">
+
+    <div class="ellipse-badge">
+      <span class="display-md" style="font-size:28px;">THE ABSTRACT</span>
+    </div>
+
+
+    <div class="content-card" style="max-width:780px;">
+      <p class="body-text" style="font-size:18px;">
+        Large music festivals and crowded events present a serious safety challenge: existing location-tracking technologies fail precisely when they are needed most.
+      </p>
+      <p class="body-text"  style="font-size:18px;">
+        While tools like Apple AirTag, FindMy, and Life360 dominate the consumer market, no research or product has successfully addressed the accuracy degradation these systems experience in dense, signal-saturated crowds leaving festival-goers, particularly women and LGBTQ+ individuals who face disproportionate rates of harassment and harm, without a reliable way to stay connected to their trusted group.
+      </p>
+      <p class="body-text" style="font-size:18px;">
+        FestiFind fills this gap by proposing a wearable Bluetooth Low Energy tracker small enough to attach to a Kandi rave bracelet — a staple of the rave community — using an anchor-tag triangulation mechanism that does not rely on cellular service and is not degraded by physical crowd density.
+      </p>
+      <p class="body-text" style="font-size:18px;">
+        To develop this concept, I researched existing BLE positioning technologies including u-blox XPLR-AOA anchor systems and the DA14531 chip module, consulted directly with the engineering team at Totem Compass (the closest existing competitor), and explored grant funding pathways through UMD SPIN to finance a working prototype.
+      </p>
+      <p class="body-text"  style="font-size:18px;">
+        FestifFind is designed specifically to serve vulnerable populations at large events offering an affordable, culturally embedded safety tool that festivals themselves could adopt and promote, creating mutual benefit for organizers and attendees alike.
+      </p>
+      <p class="body-text"  style="font-size:18px;">
+        Keeping people connected to their people while enjoying music shouldn't cost $80 or require carrying around a massive hockey puck. 
+      </p>
+    </div>
+
+    
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- PAGE 3: SECTION II – DELIVERABLE / PROOF OF CONCEPT -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="page">
+  <div class="blob blob-tl" style="background:radial-gradient(circle,#1A237E 0%,#6B2FA0 55%,transparent 80%);"></div>
+  <div class="blob blob-br"></div>
+  <div class="blob blob-mid"></div>
+
+  <!-- checker bottom right -->
+  <div class="checker" style="bottom:30px;right:72px;">
+    <span></span><span style="background:var(--yellow)"></span><span></span><span style="background:var(--yellow)"></span>
+    <span style="background:var(--yellow)"></span><span></span><span style="background:var(--yellow)"></span><span></span>
+    <span></span><span style="background:var(--yellow)"></span><span></span><span style="background:var(--yellow)"></span>
+    <span style="background:var(--yellow)"></span><span></span><span style="background:var(--yellow)"></span><span></span>
+  </div>
+
+  <div class="page-num">Page <span>03</span></div>
+
+  <div class="display-lg" style="position:absolute;top:48px;left:72px;">DELIVERABLE</div>
+
+  <div style="position:relative;z-index:2;margin-top:70px;">
+    <div class="section-badge"><span class="dot"></span>Section II &nbsp;·&nbsp; Proof of Concept</div>
+
+    <div class="two-col">
+      <div>
+        <p class="body-text" style="margin-bottom:20px; font-size: large;">
+          While I may not have a tangile working prototype of the FestiFind, I have made significant efforts to make my project a reality. 
+          Some of the steps I have taken to make my project a reality include researching the technology I need to build out my solution, 
+          finding the materials I will need to build a working prototype,
+          developing a blueprint to explain how the materials and technology will work, and 
+          researching funding opportunities to build my solution. 
+        
+
+        <div class="instruction" style="margin-top:20px;">
+          <div class="instr-label" style="font-size:24px;">✦ Explanation of Deliverable </div>
+          <p style="font-style:normal; font-size: large;"> The diagram to the right details how the technology behind FestiFind works. 
+            Essentially, it relies on two physical components: an anchor and tag. The tag is what the user will wear on a rave bracelet
+            as an attached charm as you can see in examples below. The tags in the diagram (DA14531 chips) are small enough to attach
+            to a rave bracelet without becoming a burden to users which is what I had in mind when researching location tracking technologies. The second physical component required for FestiFind to work is the anchor 
+            which are the green boards in the diagram. The way in which these two components work together is by using the angle of arrival
+            and departure from the tags to the anchors. The anchors then use those angles to triangulate the position of the tags. 
+            
+          </p>
+          <p style="margin-top:20px; font-style:normal; font-size: large;">For FestiFind to become a reality, we will have to partner with various festivals
+            and events to place these anchors around their grounds to maintain location accuracy. Once these anchors are in place, tags 
+            can be connected to them using Bluetooth Low Energy technology and then that location can be sent to a customer application 
+            similar to what FindMy and Life360 attempts to do. Once these tags, the anchors, and the user interface are programmed, the 
+            tags can be sent out to customers with instructions on how to connect them with the interface and anchors can be sent out to festivals. 
+</p>
+
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:20px;">
+        <img src="howfestifindworks.jpg" style="height:360px; border-radius:6px; object-fit:cover;">
+        <img src="kandiwithtracker.jpg" style="height:600px; border-radius:6px; object-fit:cover;">
+        
+
+        <div class="content-card" style="padding:16px 20px;">
+          <div class="section-sub" style="font-size:14px;margin-bottom:6px;">Format &amp; Medium</div>
+          <p class="body-text" style="font-size:13px;">Above are illustrations of exactly how the FestiFind will work and what the end product might look like for a user. </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- PAGE 4: SECTION III – PROCESS & PROOF OF EFFORT -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="page">
+  <div class="blob blob-tl"></div>
+  <div class="blob blob-tr" style="opacity:0.4;"></div>
+  <div class="blob blob-br"></div>
+
+  <!-- x-pattern top right -->
+  <div class="x-pattern" style="top:28px;right:200px;">
+    × × × × × × ×<br>× × × × × × ×<br>× × × × × × ×
+  </div>
+
+  <div class="asterisk" style="bottom:60px;right:80px;font-size:60px;opacity:0.7;">✳</div>
+
+  <div class="page-num">Page <span>04</span></div>
+
+  <div style="position:relative;z-index:2;">
+    <div class="ellipse-badge">
+      <span class="display-md" style="font-size:26px;">PROCESS &amp; EFFORT</span>
+    </div>
+    <div class="section-badge"><span class="dot"></span>Section III <span class="dot"></span> </div>
+
+    <div class="two-col" style="gap:48px;">
+      <div>
+        <div class="section-sub">Process Documentation</div>
+        <ul class="bullet-list">
+          <li>Finalized Project Focus - Early Feb 2026</li>
+          <li>Initial Research and Expert Consultation - Mid Feb 2026</li>
+          <li>Research Finished - March 2026</li>
+          <li>Product Ideation & Documentation - Early April 2026</li>
+          <li>Grant List - Mid April 2026</li>
+          <li>Initial Product Pitch - Mid April 2026</li>
+          <li>Grant Applications Complete - May+</li>
+          <li>Finalize Investor Pitch - May+</li>
+          <li>Build Prototype - June+</li>
+        </ul>
+
+        <div class="divider"></div>
+
+        <div class="section-sub">Letter to Expert</div>
+        <p class="body-text" style="margin-bottom:12px;"> An important step in my research was reaching out to a competitor company to give me ideas on what technology I should use to make a working prototype. They pointed me to the materials I ended up using in my final product proposal. My email to them is linked below.
+
+        <div class="content-card" style="margin-top:8px;">
+          <div class="section-sub" style="font-size:14px;margin-bottom:8px;">Totem Compass</div>
+          <p class="body-text" style="font-size:13px;margin-top:6px;">Hello,
+
+I am a Computer Science student at the University of Maryland College Park who is currently researching Bluetooth Low Energy tracking devices and mesh network tracking devices in hopes of building my own for a capstone project. I am currently looking into building a tracker that is in a small form factor (hopefully so I can put it in a rave kandi bracelet), accurate, and long lasting. Do you have any advice or ideas for what technologies I could look into (and maybe innovate upon) to build something that is extremely accurate, but doesn't rely on cell service or its accuracy is reduced by the presence of lots of physical objects? I've noticed at raves and festivals apps such as Life360 or FindMy are very inaccurate due to the large number of people which I think is what causes the service to be so terrible. I am not sure how much you can share about how the Totem Compass works for privacy purposes and intellectual property protection, but as much detail as possible would be greatly appreciated.
+</p>
+<p class="body-text" style="font-size:13px;margin-top:6px;">
+Looking forward to hearing back, </p>
+<p class="body-text" style="font-size:13px;margin-top:6px;">
+Vincent Von Wachter </p>
+<p class="body-text" style="font-size:13px;margin-top:6px;">
+UMD 'CS 27 </p>
+<p class="body-text" style="font-size:13px;margin-top:6px;">
+https://www.linkedin.com/in/vincent-von-wachter-945246315/</p>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <img src="image.jpg" style="height:360px; border-radius:6px; object-fit:cover;">
+        <img src="expensive.jpg" style="height:360px; border-radius:6px; object-fit:cover;">
+        <img src="response.jpg.jpg" style="height:360px; border-radius:6px; object-fit:cover;">
+        
+
+        <div class="instruction" style="margin-top:0;">
+          <div class="instr-label">✦ Footnotes</div>
+          <p> In the photos above we can see Totem Compass' response to my email pointing me to the technology and materials I would eventually use for the final design idea for my prototype. We can also see the price of the anchor-tag combo I would need to build a working prototype which was an initial roadblock. From this I looked into getting funding where we can see one of the grant tools I used (UMD SPIN) to gather funding for my eventual physical prototype of FestiFind. </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- PAGE 5: SECTION IV – BIBLIOGRAPHY WITH EXPLICATION -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="page">
+  <div class="blob blob-tl" style="background:radial-gradient(circle,#6B2FA0 0%,#E8356D 55%,transparent 80%);opacity:0.4;"></div>
+  <div class="blob blob-br" style="opacity:0.35;"></div>
+
+  <div class="page-num">Page <span>05</span></div>
+
+  <!-- large decorative text -->
+  <div style="position:absolute;right:52px;top:44px;z-index:1;opacity:0.08;">
+    <div class="display-xl" style="font-size:200px;color:white;line-height:1;">IV</div>
+  </div>
+
+  <div style="position:relative;z-index:2;">
+    <div class="section-badge"><span class="dot"></span>Section IV </div>
+    <div class="display-lg" style="margin-bottom:28px;">BIBLIOGRAPHY<br>&amp; EXPLICATION</div>
+
+    <div class="two-col" style="gap:52px;align-items:start;">
+      <div>
+        <!-- Bibliography entries -->
+        <div class="section-sub" style="margin-bottom:12px;">Sources</div>
+        <div class="bib-entry">
+          <span class="bib-num">01</span>
+          <span class="bib-citation placeholder-text">“Access SPIN.” Infoedglobal.com, University of Maryland, 2025, spin.infoedglobal.com/Home/SOLRSearch. Accessed 19 Apr. 2026. </span>
+        </div> 
+        <div class="bib-entry">
+          <span class="bib-num">02</span>
+          <span class="bib-citation placeholder-text">Alvarado, E, et al. Apple Incorporated : Airtags and Unwanted Surveillance. The Eugene D. Fanning Center for Business Communication, Mendoza College of Business, University of Notre Dame, 2022. https://doi.org/10.4135/9781071931738</span>
+        </div>
+        <div class="bib-entry">
+          <span class="bib-num">03</span>
+          <span class="bib-citation placeholder-text">Auryn Codes. “No Signal, No Problem! DIY ESP32 Festival Tracker Unveiled! 🎊🔍 Part 1.” YouTube, 1 Mar. 2024, www.youtube.com/watch?v=i7K-_zALYdg. Accessed 19 Apr. 2026. </span>
+        </div>
+        <div class="bib-entry">
+          <span class="bib-num">04</span>
+          <span class="bib-citation placeholder-text">“Bluetooth Direction Finding User Guide.” XPLR-AOA-1 and XPLRAOA-2 Explorer Kits, u-blox, 2 Feb. 2024, content.u-blox.com/sites/default/files/XPLR-AOA-Explorer-kits_UserGuide_UBX-21004616.pdf?utm_content=UBX-21004616. Accessed 19 Apr. 2026.</span>
+        </div>
+        <div class="bib-entry">
+          <span class="bib-num">04</span>
+          <span class="bib-citation placeholder-text">"Electric Daisy Carnival." Insomniac Events, Insomniac, www.insomniac.com/events/our-world/electric-daisy-carnival/. Accessed 9 May 2026. </span>
+        </div>
+        <div class="bib-entry">
+          <span class="bib-num">04</span>
+          <span class="bib-citation placeholder-text">Heen , Miliaikeala , and Joel Lieberman . “Sexual Harassment and Violence at Music Concerts and Festivals.” University of Las Vegas CENTER for CRIME and JUSTICE POLICY, UNLV, Mar. 2018, www.unlv.edu/sites/default/files/media/document/2023-10/Sexual-Harrassment-and-Violence-at-Music-Concerts-and-Festivals-V2.pdf. Accessed 19 Apr. 2026.</span>
+        </div>
+        
+        <div class="bib-entry">
+          <span class="bib-num">06</span>
+          <span class="bib-citation placeholder-text">Jang, HyunSeok Daniel, et al. A Tale of Three Location Trackers: AirTag, SmartTag, and Tile. January 2025, https://doi.org/10.48550/arxiv.2501.17452.</span>
+        </div>
+        <div class="bib-entry">
+          <span class="bib-num">08</span>
+          <span class="bib-citation placeholder-text">"Totem Compass." Totem Labs, totemlabs.com. Accessed 9 May 2026. </span>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:6px;flex-wrap:wrap;position:relative;z-index:2;">
+          <span class="tag">3 Academic Articles</span>
+          <span class="tag">3 Websites</span>
+          <span class="tag">1 Video</span>
+          <span class="tag">1 Product Documentation</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-sub" style="margin-bottom:12px;">Explication (200–400+ words)</div>
+        <div class="content-card" style="margin-bottom:16px;">
+          <p class="body-text" style="font-size:14px;">
+            Starting with the initial research, I used websites like Totem Labs and articles like A Tale of Three Location trackers to gain some introductory insight into what location trackers already exist and how they work. With these sources brought some initial challenges such as figuring out what opportunities there were for me to innovate upon. From these I found that current trackers are too large, expensive, and are hindered in large crowds due to cellular service issues. Moving on from this initial research I then used videos like No Signal, No Problem, and documentation like the Bluetooth Direction Finding User Guide after being pointed to technology I could use to build a prototype. 
+            <p class="body-text" style="font-size:14px;margin-top:6px;">
+            After mapping out what my product would look like, I did some risk assessment on the impact of my product with sources like Sexual Harassment and Violence at Music Concerts and Festivals as well as Airtags and Unwanted surveillance to see what negative impacts my product might bring with its tracking capabilities. Lastly, I used the SPIN network from UMD for grant research to get funding for my prototype and websites for music festivals to see who I could pitch my idea to if I eventually need to collaborate with festival organizers. 
+        </div>
+        <div class="content-card">
+          <p class="body-text" style="font-size:14px;">
+            Overall, I tended to rely on more practical sources as opposed to academic articles as innovating upon the theory and math for location tracking is not something within the scope of a semester long projects. I made great use of the documentation for anchor and tags as well as other competitors in the field of tag trackers. The most useful source for this project was the engineers from Totem Labs and I would likely have been stuck without a product design without their guidance.           </p>
+        </div>
+        <div class="instruction" style="margin-top:16px;">
+          <div class="instr-label">✦ Note</div>
+          <p>My methods of research were quite abstract as they mostly relied on looking into existing technology and seeing in which ways I can combine or innovate upon it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- PAGE 6: SECTION V – SUMMARY & REFLECTION -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="page">
+  <div class="blob blob-tl" style="opacity:0.5;"></div>
+  <div class="blob blob-tr"></div>
+  <div class="blob blob-br" style="opacity:0.3;"></div>
+
+  <!-- sparkles -->
+  <div style="position:absolute;top:60px;right:130px;z-index:1;color:white;font-size:40px;opacity:0.8;">✦</div>
+  <div style="position:absolute;bottom:60px;left:85px;z-index:1;color:white;font-size:28px;opacity:0.6;">✦</div>
+
+  <div class="x-pattern" style="bottom:30px;right:60px;font-size:10px;">
+    × × × × × × × ×<br>× × × × × × × ×<br>× × × × × × × ×<br>× × × × × × × ×
+  </div>
+
+  <div class="page-num">Page <span>06</span></div>
+
+  <div style="position:relative;z-index:2;">
+    <div class="display-lg" style="margin-bottom:8px;">SUMMARY<br>&amp; REFLECTION</div>
+    <div class="section-badge" style="margin-bottom:28px;"><span class="dot"></span>Section V </div>
+
+    <div class="three-col">
+      <div>
+        <div class="refl-q" style="font-weight:bold;">
+          <div class="q-label">Prompt 01</div>
+          <p><strong> What did this experience teach you about conceptualizing and designing a project from scratch? What takeaways will you carry into your next project?</strong></p>
+        </div>
+        <div class="content-card" style="min-height:120px;">
+          <p class="body-text" style="font-size:15px;">Working on FestiFind taught me that the hardest part of designing a project from scratch isn't the building, its the scoping.
+            Early on, I had a broad vision of what I wanted to create, but I quickly learned that a good idea means nothing without a concrete understanding of the constraints around it. 
+            Researching the existing technology, reaching out to Totem Compass, and digging into Bluetooth Low Energy documentation forced me to confront the gap between what I imagined and what was actually feasible with the time and resources I had. 
+            <p class="body-text" style="font-size:15px;margin-top:6px;">
+            One of the biggest takeaways is the value of talking to people who have already tried to solve your problem. 
+            The conversation with Totem Compass's engineering team saved me weeks of going down the wrong path and pointed me directly to the materials and architecture I needed. 
+            I will carry that instinct into every future project: to reach out early, ask specific questions, and treat my competitors as a resource just as valuable as academic sources. 
+            I also learned that a project does not need to be finished to be valuable. FestiFind does not have a working prototype yet, but the research, the grant applications, the technical blueprint, and the pitch materials are all real, actionable outputs. 
+            Moving forward I will think less about a project as something that ends with a finished product, and more as something that can end when you have laid a clear foundation to build off of.</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="refl-q" style="font-weight:bold;">
+          <div class="q-label">Prompt 02</div>
+          <p>How did you utilize feedback from classmates and your instructor? What changed as a result?</p>
+        </div>
+        <div class="content-card" style="min-height:120px;">
+          <p class="body-text" style="font-size:16px;">The most useful feedback I received throughout this project came from my classmates and instructor pushing me to be more realistic about what my final deliverable could actually be. Early on, I was framing FestiFind as a project that would end with a physical working prototype, which was never really achievable given that I do not currently have the funds to purchase the hardware I would need. 
+            <p class="body-text" style="font-size:15px;margin-top:6px;">
+            The feedback I got redirected me toward treating this as a proof of concept and funding project instead, which honestly made the whole thing feel more real.
+            As a result of that pivot, I shifted a significant portion of my energy toward researching grants and funding opportunities through tools like UMD SPIN, identifying sources that apply to student innovators and small technology projects. </p>
+        </div>
+      </div>
+
+      <div>
+        <div class="refl-q" style="font-weight:bold;">
+          <div class="q-label">Prompt 03</div>
+          <p>What kind of labor went into this project, and how do you feel about that work? What are you most proud of about the final product?</p>
+        </div>
+        <div class="content-card" style="min-height:120px;">
+          <p class="body-text" style="font-size:15px;">
+            The effort that went into FestiFind was way more varied than I expected. 
+            Starting with the initial research I was going through articles, watching YouTube series on ESP32 systems, and reading through Bluetooth Low Energy documentation which was honestly pretty dense but started making sense the more I sat with it. 
+            Then there was the outreach side: writing a cold email to an actual company, figuring out what to even ask them, and then getting a real response back from Totem Compass's engineering team that actually pointed me in a useful direction. 
+            <p class="body-text" style="font-size:15px;margin-top:6px;">
+            Beyond the technical stuff I also put a lot of time into the risk assessment side of things, looking at sources on sexual harassment at festivals and the surveillance concerns around products like AirTags to make sure I was thinking about the potential downsides of what I was building. 
+            Then there was the grant research through UMD SPIN and looking into festival organizers I could eventually pitch to, which was its own whole process.
+            <p class="body-text" style="font-size:15px;margin-top:6px;">
+
+            What I am most proud of though is presenting to my classmates. 
+            Being able to explain FestiFind and my work to people who had no context for what I was building, and actually having people understand the problem and get why my solution made sense felt very satisfyibg. That's what it made it feel less like a class project and more like real product. </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider" style="margin-top:28px;"></div>
+
+    <div class="content-card" style="margin-top:0;">
+      <div class="section-sub" style="font-size:15px;margin-bottom:10px;">Note</div>
+      <p class="body-text" style="font-size:14px;">
+        Doing this portfolio has helped me learn some HTML and frontend development basics as I made this entire portfolio from scratch in HTML.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- PAGE 7: CLOSING -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="page" style="min-height:60vh;justify-content:center;align-items:center;text-align:center;">
+  <div class="blob blob-tl"></div>
+  <div class="blob blob-tr"></div>
+  <div class="blob blob-br"></div>
+  <div class="blob blob-mid"></div>
+
+  <div class="circle-deco" style="width:500px;height:500px;top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+
+  <!-- sparkle white top left -->
+  <div style="position:absolute;top:50px;left:72px;z-index:1;color:white;font-size:60px;opacity:0.9;">✦</div>
+  <!-- sparkle white bottom right -->
+  <div style="position:absolute;bottom:50px;right:120px;z-index:1;color:white;font-size:60px;opacity:0.9;">✦</div>
+
+  <div class="x-pattern" style="top:28px;right:60px;">
+    × × × × × × × ×<br>× × × × × × × ×<br>× × × × × × × ×
+  </div>
+
+  <div class="page-num">Page <span>07</span></div>
+
+  <div style="position:relative;z-index:2;">
+    <div class="display-xl" style="margin-bottom:20px;">THANK<br>YOU.</div>
+    <p class="body-text" style="text-align:center;font-size:15px;margin:0 auto 28px;max-width:400px;color:rgba(255,255,255,0.55);">
+      Questions, feedback, and suggestions are always welcome!
+    </p>
+    <div class="divider" style="width:200px;margin:0 auto 24px;"></div>
+    <p class="body-text placeholder-text" style="text-align:center;font-size:14px;letter-spacing:0.08em;">
+      vvonwach@terpmail.umd.edu
+    </p>
+  </div>
+</section>
+
+</body>
+</html>
